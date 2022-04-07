@@ -36,13 +36,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-
+  // 主页面重定向至/dashboard
   {
     path: '/',
     component: Layout,
@@ -54,13 +48,56 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
   {
-    path: '/example',
+    path: '/usersManage',
     component: Layout,
-    redirect: '/example/table',
+    children: [
+      {
+        path: 'index',
+        name: 'usersManage',
+        component: () => import('@/views/usersManage'),
+        meta: { title: '用户管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/backstageUsersManage',
+    component: Layout,
     name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    meta: { title: '后台用户管理', icon: 'table' },
+    children: [
+      {
+        path: 'index',
+        name: 'backstageUsersManage',
+        component: () => import('@/views/backstageUsersManage'),
+        meta: { title: '后台用户管理', icon: 'table' }
+      },
+      {
+        path: 'info',
+        name: 'backstageUserInfo',
+        component: () => import('@/views/backstageUsersManage/info'),
+        meta: { title: '后台用户信息', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/push',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'pushManage',
+        component: () => import('@/views/pushManage'),
+        meta: { title: '推送管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/goods',
+    component: Layout,
+    redirect: '/goods/table',
+    name: 'Example',
+    meta: { title: '商品管理', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'table',
@@ -73,11 +110,47 @@ export const constantRoutes = [
         name: 'Tree',
         component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
+      },
+      {
+        path: 'categoryTree',
+        name: 'categoryTree',
+        component: () => import('@/views/categorys/categoryTree/index'),
+        meta: { title: '商品类别管理', icon: 'tree' }
+      },
+      {
+        path: 'categoryRecommends',
+        name: 'categoryRecommends',
+        component: () => import('@/views/categorys/categoryRecommends/index'),
+        meta: { title: '商品类别推荐管理', icon: 'form' }
       }
     ]
   },
-
   {
+    path: '/feedback',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'feedbackManage',
+        component: () => import('@/views/feedbackManage'),
+        meta: { title: '工单管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'orderManage',
+        component: () => import('@/views/orderManage'),
+        meta: { title: '订单管理', icon: 'table' }
+      }
+    ]
+  },
+  /*
+  * {
     path: '/form',
     component: Layout,
     children: [
@@ -89,7 +162,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/nested',
     component: Layout,
@@ -148,20 +220,15 @@ export const constantRoutes = [
       }
     ]
   },
+  * */
 
+  // 错误跳转至404 页面
+  { path: '*', redirect: '/404', hidden: true },
   {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  }
 ]
 
 const createRouter = () => new Router({
