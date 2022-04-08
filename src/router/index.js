@@ -56,7 +56,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'usersManage',
         component: () => import('@/views/usersManage'),
-        meta: { title: '用户管理', icon: 'table' }
+        meta: { title: '用户管理', icon: 'el-icon-user-solid' }
       }
     ]
   },
@@ -64,7 +64,7 @@ export const constantRoutes = [
     path: '/backstageUsersManage',
     component: Layout,
     name: 'Example',
-    meta: { title: '后台用户管理', icon: 'table' },
+    meta: { title: '后台用户管理', icon: 'el-icon-s-shop' },
     children: [
       {
         path: 'index',
@@ -88,7 +88,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'pushManage',
         component: () => import('@/views/pushManage'),
-        meta: { title: '推送管理', icon: 'table' }
+        meta: { title: '推送管理', icon: 'el-icon-s-promotion' }
       }
     ]
   },
@@ -133,7 +133,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'feedbackManage',
         component: () => import('@/views/feedbackManage'),
-        meta: { title: '工单管理', icon: 'table' }
+        meta: { title: '工单管理', icon: 'el-icon-s-comment' }
       }
     ]
   },
@@ -145,7 +145,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'orderManage',
         component: () => import('@/views/orderManage'),
-        meta: { title: '订单管理', icon: 'table' }
+        meta: { title: '订单管理', icon: 'el-icon-s-claim' }
       }
     ]
   },
