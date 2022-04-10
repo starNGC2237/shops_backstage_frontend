@@ -131,8 +131,8 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'feedbackManage',
-        component: () => import('@/views/feedbackManage'),
+        name: 'feedBackManage',
+        component: () => import('@/views/feedBackManage'),
         meta: { title: '工单管理', icon: 'el-icon-s-comment' }
       }
     ]
