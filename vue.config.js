@@ -31,6 +31,13 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     proxy: {
+      '/api/express': {
+        // 提供数据的服务器地址
+        changeOrigin: true,
+        target: 'http://101.35.79.150:9999',
+        // 会在后面加/api,除非,重写去掉
+        pathRewrite: { '^/api/express': '' }
+      },
       '/api': {
         // 提供数据的服务器地址
         changeOrigin: true,

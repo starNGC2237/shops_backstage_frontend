@@ -1,7 +1,33 @@
 <template>
-  <el-table
-    :data="tableData"
-  />
+  <div class="feedBackManage">
+    <el-table
+      :data="tableData"
+      border
+    >
+      <el-table-column
+        prop="feedBackId"
+        label="编号"
+        align="center"
+        width="100"
+      />
+      <el-table-column
+        prop="userName"
+        label="用户名"
+        align="center"
+        width="100"
+      />
+      <el-table-column
+        prop="content"
+        label="内容"
+      />
+      <el-table-column
+        width="150"
+        align="center"
+        prop="contact"
+        label="联系方式"
+      />
+    </el-table>
+  </div>
 </template>
 
 <script>
@@ -18,14 +44,17 @@ export default {
   },
   methods: {
     getData() {
-      allFeedBack(res => {
+      allFeedBack().then(res => {
         this.tableData = res.data
-      }).then().catch().finally()
+      }).catch().finally()
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-
+.feedBackManage{
+  display: flex;
+  padding: 1rem;
+}
 </style>
