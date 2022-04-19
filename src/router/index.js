@@ -149,6 +149,19 @@ export const constantRoutes = [
       }
     ]
   },
+  // todo
+  {
+    path: '/userAbout',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'orderManage',
+        component: () => import('@/views/orderManage'),
+        meta: { title: '后台用户信息', icon: 'el-icon-s-claim' }
+      }
+    ]
+  },
   /*
   * {
     path: '/form',

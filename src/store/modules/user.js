@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     userName: '',
-    imageUrl: ''
+    imageUrl: '',
+    addressList: []
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, imageUrl) => {
     state.imageUrl = imageUrl
+  },
+  SET_ADDRESSLIST(state, addressList) {
+    state.addressList = addressList
   }
 }
 
@@ -53,9 +57,10 @@ const actions = {
           return reject('验证失败，请稍后再试')
         }
         if (data.role === '商家' || data.role === '仓库') {
-          const { userName, imageUrl } = data
+          const { userName, imageUrl, addressList } = data
           commit('SET_NAME', userName)
           commit('SET_AVATAR', imageUrl)
+          commit('SET_ADDRESSLIST', addressList)
           resolve(data)
         } else {
           removeToken() // must remove  token  first

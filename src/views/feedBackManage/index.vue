@@ -26,6 +26,16 @@
         prop="contact"
         label="联系方式"
       />
+      <el-table-column
+        width="150"
+        align="center"
+        prop="isDone"
+        label="是否解决"
+      >
+        <template slot-scope="scope">
+          {{ !!scope.row.isDone?'已解决':'未解决' }}
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -46,7 +56,9 @@ export default {
     getData() {
       allFeedBack().then(res => {
         this.tableData = res.data
-      }).catch().finally()
+      }).catch(() => {
+
+      }).finally()
     }
   }
 }
