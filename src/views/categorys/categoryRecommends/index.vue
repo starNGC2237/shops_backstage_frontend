@@ -1,19 +1,85 @@
 <template>
-  <div class="app-container" />
+  <div class="app-container">
+    <el-button @click="dialogVisible = true;">添加推荐类别</el-button>
+    <div class="tags">
+      推荐类别：
+      <el-tag
+        v-for="item in categoryOneData"
+        :key="item.categoryId"
+        closable
+      >
+        {{ item.categoryName }}
+      </el-tag>
+    </div>
+    <el-dialog
+      title="添加推荐类别"
+      :visible.sync="dialogVisible"
+      width="40%"
+      @close="dialogVisible = false;"
+      @closed="clearForm"
+    >
+      <el-form>
+        <el-form-item label="请选择推荐类别">
+          <el-select v-model="form.categoryId">
+            <el-option
+              v-for="item in categoryOneData"
+              :key="item.categoryId"
+              :label="item.categoryName"
+              :value="item.categoryId"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import { getAllCategory } from '@/api/categorys/categoryTree'
+
 export default {
 
   data() {
     return {
-
+      loading: false,
+      a: [],
+      dialogVisible: false,
+      categoryOneData: [],
+      form: {
+        categoryId: ''
+      }
     }
   },
-
+  mounted() {
+    this.getCategory()
+  },
   methods: {
-
+    getCategory() {
+      this.loading = true
+      getAllCategory().then(res => {
+        this.categoryOneData = res.data
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    clearForm() {
+      this.form = {
+        categoryId: ''
+      }
+    }
   }
 }
 </script>
+<style scoped>
+.tags :not(:last-child){
+  margin-right: 1rem;
+}
+.tags{
+  margin-top: 1rem;
+}
+</style>
 
