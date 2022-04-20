@@ -1,6 +1,9 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
+  <div class="user_info">
+    <el-form
+      ref="form"
+      :model="form"
+    >
       <el-form-item label="用户名">
         <el-input v-model="form.userName" :disabled="disabled" />
       </el-form-item>
@@ -63,6 +66,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.user_info{
+  padding: 1rem 5rem;
+}
 .line{
   text-align: center;
 }

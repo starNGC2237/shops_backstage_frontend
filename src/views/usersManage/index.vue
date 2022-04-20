@@ -17,6 +17,16 @@
       :data="userData"
     >
       <el-table-column
+        prop="role"
+        width="100"
+        label="权限"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-tag>{{scope.row.role}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="imageUrl"
         width="100"
         label="头像"
