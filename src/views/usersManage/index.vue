@@ -4,7 +4,7 @@
     <el-form :inline="true">
       <el-form-item>
         <!--todo-->
-        <el-input placeholder="输入关键字进行筛选"/>
+        <el-input placeholder="输入关键字进行筛选" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getUserData()">搜索</el-button>
@@ -23,7 +23,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-tag>{{scope.row.role}}</el-tag>
+          <el-tag>{{ scope.row.role }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -94,11 +94,16 @@ export default {
   methods: {
     getUserData() {
       this.loading = true
-      allUser('用户').then(res => {
-        this.userData = res.data
-      }).catch().finally(() => {
+      if (this.$store.state.user.role === '仓库') {
+        this.userData = []
         this.loading = false
-      })
+      } else {
+        allUser('用户').then(res => {
+          this.userData = res.data
+        }).catch().finally(() => {
+          this.loading = false
+        })
+      }
     }
   }
 }

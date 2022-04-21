@@ -7,7 +7,11 @@ const getDefaultState = () => {
     token: getToken(),
     userName: '',
     imageUrl: '',
-    addressList: []
+    role: '',
+    addressList: [],
+    createTime: '',
+    phone: 0,
+    nickName: ''
   }
 }
 
@@ -23,11 +27,23 @@ const mutations = {
   SET_NAME: (state, userName) => {
     state.userName = userName
   },
+  SET_NICKNAME: (state, nickName) => {
+    state.nickName = nickName
+  },
   SET_AVATAR: (state, imageUrl) => {
     state.imageUrl = imageUrl
   },
   SET_ADDRESSLIST(state, addressList) {
     state.addressList = addressList
+  },
+  SET_ROLE(state, role) {
+    state.role = role
+  },
+  SET_CREATETIME(state, createTime) {
+    state.createTime = createTime
+  },
+  SET_PHONE(state, phone) {
+    state.phone = phone
   }
 }
 
@@ -57,10 +73,14 @@ const actions = {
           return reject('验证失败，请稍后再试')
         }
         if (data.role === '商家' || data.role === '仓库') {
-          const { userName, imageUrl, addressList } = data
+          const { userName, imageUrl, addressList, role, createTime, nickName, phone } = data
           commit('SET_NAME', userName)
           commit('SET_AVATAR', imageUrl)
           commit('SET_ADDRESSLIST', addressList)
+          commit('SET_ROLE', role)
+          commit('SET_CREATETIME', createTime)
+          commit('SET_NICKNAME', nickName)
+          commit('SET_PHONE', phone)
           resolve(data)
         } else {
           removeToken() // must remove  token  first

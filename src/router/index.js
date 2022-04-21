@@ -63,12 +63,12 @@ export const constantRoutes = [
   {
     path: '/backstageUsersManage',
     component: Layout,
-    name: 'Example',
+    name: 'backstageUsersManage',
     meta: { title: '后台用户管理', icon: 'el-icon-s-shop' },
     children: [
       {
         path: 'index',
-        name: 'backstageUsersManage',
+        name: 'backstageUsersManageIndex',
         component: () => import('@/views/backstageUsersManage'),
         meta: { title: '后台用户管理', icon: 'table' }
       },
@@ -96,7 +96,7 @@ export const constantRoutes = [
     path: '/goods',
     component: Layout,
     redirect: '/goods/table',
-    name: 'Example',
+    name: 'goods',
     meta: { title: '商品管理', icon: 'el-icon-s-help' },
     children: [
       {
@@ -146,19 +146,6 @@ export const constantRoutes = [
         name: 'orderManage',
         component: () => import('@/views/orderManage'),
         meta: { title: '订单管理', icon: 'el-icon-s-claim' }
-      }
-    ]
-  },
-  // todo
-  {
-    path: '/userAbout',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'orderManage',
-        component: () => import('@/views/orderManage'),
-        meta: { title: '后台用户信息', icon: 'el-icon-s-claim' }
       }
     ]
   },

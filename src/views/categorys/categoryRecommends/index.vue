@@ -1,12 +1,13 @@
 <template>
   <div class="app-container">
-    <el-button @click="dialogVisible = true;">添加推荐类别</el-button>
+    <el-button @click="getPer">添加推荐类别</el-button>
     <div class="tags">
       推荐类别：
       <el-tag
         v-for="item in categoryOneData"
         :key="item.categoryId"
         closable
+        @close="deleteRecommend(item.categoryId)"
       >
         {{ item.categoryName }}
       </el-tag>
@@ -40,6 +41,7 @@
 
 <script>
 import { getAllCategory } from '@/api/categorys/categoryTree'
+import { Message } from 'element-ui'
 
 export default {
 
@@ -69,6 +71,27 @@ export default {
     clearForm() {
       this.form = {
         categoryId: ''
+      }
+    },
+    deleteRecommend() {
+      if (this.$store.state.user.role === '仓库') {
+        Message({
+          message: '没有权限',
+          type: 'error'
+        })
+      } else {
+        // todo
+        // do something
+      }
+    },
+    getPer() {
+      if (this.$store.state.user.role === '仓库') {
+        Message({
+          message: '没有权限',
+          type: 'error'
+        })
+      } else {
+        this.dialogVisible = true
       }
     }
   }

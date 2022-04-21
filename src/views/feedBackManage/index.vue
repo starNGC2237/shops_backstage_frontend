@@ -54,11 +54,13 @@ export default {
   },
   methods: {
     getData() {
-      allFeedBack().then(res => {
-        this.tableData = res.data
-      }).catch(() => {
-
-      }).finally()
+      if (this.$store.state.user.role === '仓库') {
+        this.tableData = []
+      } else {
+        allFeedBack().then(res => {
+          this.tableData = res.data
+        })
+      }
     }
   }
 }

@@ -19,7 +19,7 @@
           <span>{{ node.label }}</span>
           <span>
             <el-button
-              v-if="data.categoryLevel!== 3"
+              v-if="data.categoryLevel!== 3 && $store.state.user.role === '商家'"
               type="text"
               size="mini"
               @click.stop="categoryMethod(data,'添加')"
@@ -27,7 +27,7 @@
               添加子类
             </el-button>
             <el-button
-              v-if="data.categoryId !== 0 "
+              v-if="data.categoryId !== 0 && $store.state.user.role === '商家'"
               type="text"
               size="mini"
               @click.stop="categoryMethod(data,'编辑')"
@@ -35,7 +35,7 @@
               编辑
             </el-button>
             <el-button
-              v-if="data.categoryId !== 0"
+              v-if="data.categoryId !== 0 && $store.state.user.role === '商家'"
               type="text"
               size="mini"
               @click.stop="categoryMethod(data,'删除')"

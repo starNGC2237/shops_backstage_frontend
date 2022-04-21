@@ -17,7 +17,7 @@
         <el-input v-model="form.passWord" show-password auto-complete="off" />
       </el-form-item>
       <el-form-item label="仓库地址">
-        <el-input v-model="form.address" />
+        <el-input v-model="form.address" :disabled="!!form.address" />
       </el-form-item>
       <el-form-item label="用户权限">
         <el-input v-model="form.role" disabled />
@@ -46,8 +46,10 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$route)
     if (this.$route.params.user) {
       Object.assign(this.form, this.$route.params.user)
+      this.form.address = this.form.addressList[0].provinceName + this.form.addressList[0].cityName + this.form.addressList[0].districtName + this.form.addressList[0].addressInfo
       this.disabled = true
     }
   },

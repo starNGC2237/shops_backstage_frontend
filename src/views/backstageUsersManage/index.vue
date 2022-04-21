@@ -23,7 +23,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-tag>{{scope.row.role}}</el-tag>
+          <el-tag>{{ scope.row.role }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -66,7 +66,9 @@
         label="仓库地址"
       >
         <template slot-scope="scope">
-          {{ scope.row.addressList[0].provinceName + scope.row.addressList[0].cityName + scope.row.addressList[0].districtName + scope.row.addressList[0].addressInfo }}
+          <span v-if="scope.row.addressList[0]">
+            {{ scope.row.addressList[0].provinceName + scope.row.addressList[0].cityName + scope.row.addressList[0].districtName + scope.row.addressList[0].addressInfo }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -76,8 +78,10 @@
         label="操作"
       >
         <!--todo-->
-        <el-button type="text">编辑</el-button>
-        <el-button type="text">删除</el-button>
+        <template slot-scope="scope">
+          <el-button type="text" @click="gotoInfo(scope.row)">编辑</el-button>
+          <el-button v-if="$store.state.user.role === '商家'" type="text">删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -100,11 +104,19 @@ export default {
   methods: {
     getUserData() {
       this.loading = true
-      allUser('仓库').then(res => {
-        this.backstageUserData = res.data
-      }).catch().finally(() => {
+      if (this.$store.state.user.role === '仓库') {
+        this.backstageUserData = [this.$store.state.user]
         this.loading = false
-      })
+      } else {
+        allUser('仓库').then(res => {
+          this.backstageUserData = res.data
+        }).catch().finally(() => {
+          this.loading = false
+        })
+      }
+    },
+    gotoInfo(user) {
+      this.$router.push({ name: 'backstageUserInfo', params: { user: user }})
     }
   }
 }
