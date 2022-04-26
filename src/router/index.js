@@ -100,16 +100,16 @@ export const constantRoutes = [
     meta: { title: '商品管理', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'goods',
+        name: 'goods',
+        component: () => import('@/views/goodManage/goodManage'),
+        meta: { title: '商品', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'goodTable',
+        name: 'goodTable',
+        component: () => import('@/views/goodManage/goodInfo'),
+        meta: { title: '商品信息', icon: 'table' }
       },
       {
         path: 'categoryTree',

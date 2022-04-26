@@ -3,14 +3,18 @@
     <el-button @click="getPer">添加推荐类别</el-button>
     <div class="tags">
       推荐类别：
-      <el-tag
+      <div
         v-for="item in categoryOneData"
         :key="item.categoryId"
-        closable
-        @close="deleteRecommend(item.categoryId)"
       >
-        {{ item.categoryName }}
-      </el-tag>
+        <el-tag
+          v-if="!!parseInt(item.isRecommended,10)"
+          closable
+          @close="deleteRecommend(item.categoryId)"
+        >
+          {{ item.categoryName }}
+        </el-tag>
+      </div>
     </div>
     <el-dialog
       title="添加推荐类别"

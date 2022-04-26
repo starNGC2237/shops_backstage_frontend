@@ -78,10 +78,11 @@
       :visible.sync="dialogDeleteVisible"
       width="40%"
       @close="cancelDelete"
+      @closed="clearDelete"
     >
-      <span>确认要删除{{ categoryItem.categoryName }}这条类别吗，其下的所有的子类别也会被删除！</span>
+      <span>确认要删除  “{{ categoryItem.categoryName }}”  这条类别吗，其下的所有的子类别也会被删除！</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelDelete()">取 消</el-button>
+        <el-button @click="cancelDelete();">取 消</el-button>
         <el-button type="primary" @click="confirmDelete()">确 定</el-button>
       </span>
     </el-dialog>
@@ -203,12 +204,14 @@ export default {
     cancelChange() {
       this.dialogVisible = false
     },
-    // 取消删除
-    cancelDelete() {
-      this.dialogDeleteVisible = false
+    clearDelete() {
       this.categoryItem = {
         categoryName: ''
       }
+    },
+    // 取消删除
+    cancelDelete() {
+      this.dialogDeleteVisible = false
     },
     // 确认删除
     confirmDelete() {
