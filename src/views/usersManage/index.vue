@@ -3,8 +3,7 @@
     <h1>用户管理</h1>
     <el-form :inline="true">
       <el-form-item>
-        <!--todo-->
-        <el-input placeholder="输入关键字进行筛选" />
+        <el-input v-model="filterKey" placeholder="输入关键字进行筛选" @input="filter" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getUserData()">搜索</el-button>
@@ -72,20 +71,28 @@
         fixed="right"
         label="操作"
       >
-        <!--todo-->
-        <el-button type="text">封禁</el-button>
+        <template slot-scope="scope">
+          <el-button
+            v-if="$store.state.user.role === '商家'"
+            type="text"
+            @click="disableUser(scope.row)"
+          >
+            {{ scope.row.role==='用户'?'封禁':'解封' }}
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
-import { allUser } from '@/api/userManage/userManage'
+import { allUser, disable } from '@/api/userManage/userManage'
 export default {
   name: 'UsersManage',
   data() {
     return {
       loading: false,
-      userData: []
+      userData: [],
+      filterKey: ''
     }
   },
   mounted() {
@@ -102,6 +109,26 @@ export default {
           this.userData = res.data
         }).catch().finally(() => {
           this.loading = false
+        })
+      }
+    },
+    disableUser(user) {
+      this.loading = true
+      const params = {
+        userName: user.userName,
+        number: user.role === '用户' ? 1 : 0
+      }
+      disable(params).then().finally(() => {
+        this.loading = false
+        this.getUserData()
+      })
+    },
+    filter() {
+      if (this.filterKey === '') {
+        this.getUserData()
+      } else {
+        this.userData = this.userData.filter((item) => {
+          return item.userName.indexOf(this.filterKey) >= 0
         })
       }
     }
