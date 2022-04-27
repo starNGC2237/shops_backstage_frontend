@@ -5,7 +5,8 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-
+// 导入echarts
+import * as echarts from 'echarts'
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -38,7 +39,10 @@ Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
+  beforeCreate() {
+    Vue.prototype.$echarts = echarts
+  },
+  render: h => h(App),
   router,
-  store,
-  render: h => h(App)
+  store
 })

@@ -3,18 +3,18 @@
     <el-button @click="getPer">添加推荐类别</el-button>
     <div class="tags">
       推荐类别：
-      <div
+      <template
         v-for="item in categoryOneData"
-        :key="item.categoryId"
       >
         <el-tag
           v-if="!!parseInt(item.isRecommended,10)"
+          :key="item.categoryId"
           closable
-          @close="deleteRecommend(item.categoryId)"
+          @close="deleteRecommend(item)"
         >
           {{ item.categoryName }}
         </el-tag>
-      </div>
+      </template>
     </div>
     <el-dialog
       title="添加推荐类别"
@@ -37,7 +37,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="recommendCategory()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -45,6 +45,7 @@
 
 <script>
 import { getAllCategory } from '@/api/categorys/categoryTree'
+import { categoryRecommended } from '@/api/categorys/categoryRecommend'
 import { Message } from 'element-ui'
 
 export default {
@@ -52,7 +53,6 @@ export default {
   data() {
     return {
       loading: false,
-      a: [],
       dialogVisible: false,
       categoryOneData: [],
       form: {
@@ -77,15 +77,25 @@ export default {
         categoryId: ''
       }
     },
-    deleteRecommend() {
+    deleteRecommend(item) {
       if (this.$store.state.user.role === '仓库') {
         Message({
           message: '没有权限',
           type: 'error'
         })
       } else {
-        // todo
-        // do something
+        const data = {
+          categoryId: item.categoryId,
+          isRecommended: 0
+        }
+        categoryRecommended(data).then(res => {
+          Message({
+            message: res.msg,
+            type: 'success'
+          })
+        }).finally(() => {
+          this.getCategory()
+        })
       }
     },
     getPer() {
@@ -97,6 +107,21 @@ export default {
       } else {
         this.dialogVisible = true
       }
+    },
+    recommendCategory() {
+      const data = {
+        categoryId: this.form.categoryId,
+        isRecommended: 1
+      }
+      categoryRecommended(data).then(res => {
+        Message({
+          message: res.msg,
+          type: 'success'
+        })
+      }).finally(() => {
+        this.dialogVisible = false
+        this.getCategory()
+      })
     }
   }
 }
@@ -104,6 +129,12 @@ export default {
 <style scoped>
 .tags :not(:last-child){
   margin-right: 1rem;
+}
+.tags div{
+  margin-top: 0.5rem;
+}
+.tags{
+  display: flex;
 }
 .tags{
   margin-top: 1rem;

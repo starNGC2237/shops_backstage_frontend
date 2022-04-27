@@ -4,10 +4,11 @@
     <el-form :inline="true">
       <el-form-item>
         <!--todo-->
-        <el-input placeholder="输入关键字进行筛选" />
+        <el-input v-model="filterKey" placeholder="输入关键字进行筛选" @input="filter" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getUserData()">搜索</el-button>
+        <el-button type="primary" @click="gotoInfo({})">新建</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -95,7 +96,8 @@ export default {
   data() {
     return {
       loading: false,
-      backstageUserData: []
+      backstageUserData: [],
+      filterKey: ''
     }
   },
   mounted() {
@@ -117,6 +119,15 @@ export default {
     },
     gotoInfo(user) {
       this.$router.push({ name: 'backstageUserInfo', params: { user: user }})
+    },
+    filter() {
+      if (this.filterKey === '') {
+        this.getUserData()
+      } else {
+        this.backstageUserData = this.backstageUserData.filter((item) => {
+          return item.userName.indexOf(this.filterKey) >= 0
+        })
+      }
     }
   }
 }

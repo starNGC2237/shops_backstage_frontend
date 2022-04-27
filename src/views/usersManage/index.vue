@@ -22,7 +22,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.role }}</el-tag>
+          <el-tag :type="scope.row.role==='封禁'?'danger':''">{{ scope.row.role }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -99,17 +99,16 @@ export default {
     this.getUserData()
   },
   methods: {
-    getUserData() {
+    async getUserData() {
       this.loading = true
       if (this.$store.state.user.role === '仓库') {
         this.userData = []
         this.loading = false
       } else {
-        allUser('用户').then(res => {
-          this.userData = res.data
-        }).catch().finally(() => {
-          this.loading = false
-        })
+        const users = await allUser('用户')
+        const forbids = await allUser('封禁')
+        this.userData = forbids.data.concat(users.data)
+        this.loading = false
       }
     },
     disableUser(user) {

@@ -76,7 +76,7 @@ export const constantRoutes = [
         path: 'info',
         name: 'backstageUserInfo',
         component: () => import('@/views/backstageUsersManage/info'),
-        meta: { title: '后台用户信息', icon: 'table' }
+        meta: { title: '后台用户信息', icon: 'el-icon-s-cooperation' }
       }
     ]
   },
@@ -103,13 +103,19 @@ export const constantRoutes = [
         path: 'goods',
         name: 'goods',
         component: () => import('@/views/goodManage/goodManage'),
-        meta: { title: '商品', icon: 'table' }
+        meta: { title: '商品管理', icon: 'table' }
       },
       {
         path: 'goodTable',
         name: 'goodTable',
         component: () => import('@/views/goodManage/goodInfo'),
         meta: { title: '商品信息', icon: 'table' }
+      },
+      {
+        path: 'goodDistribution',
+        name: 'goodDistribution',
+        component: () => import('@/views/goodManage/goodInfo'),
+        meta: { title: '商品分布', icon: 'table' }
       },
       {
         path: 'categoryTree',

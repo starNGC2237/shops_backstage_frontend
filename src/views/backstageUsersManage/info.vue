@@ -1,5 +1,6 @@
 <template>
   <div class="user_info">
+    <h1 style="margin-bottom: 2rem">{{ $route.params.user?'修改仓库用户':'新建仓库用户' }}</h1>
     <el-form
       ref="form"
       :model="form"
@@ -69,7 +70,7 @@ export default {
 
 <style scoped lang="scss">
 .user_info{
-  padding: 1rem 5rem;
+  padding: 1rem 4rem;
 }
 .line{
   text-align: center;
