@@ -1,24 +1,5 @@
 <template>
   <div class="good_info">
-    <!--
-    {
-    "category1Id": 0,
-    "category1Name": "string",
-    "category2Id": 0,
-    "category2Name": "string",
-    "category3Id": 0,
-    "category3Name": "string",
-    "content": "string",
-    "createTime": "2022-04-21T12:56:11.240Z",
-    "goodId": 0,
-    "goodName": "string",
-    "imageUrl": "string",
-    "number": 0,
-    "price": 0,
-    "title": "string",
-    "userName": "string"
-    }
-    -->
     <el-form
       ref="form"
       :model="form"
