@@ -12,3 +12,6 @@ export function addCategory(params) {
 export function reviseCategory(params) {
   return request.post('/category/revise', params, { type: 'json' })
 }
+export function mapCategory() {
+  return request.get('/express/category/getAllCategory/map')
+}

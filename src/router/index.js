@@ -93,10 +93,10 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/goods',
+    path: '/goodManage',
     component: Layout,
-    redirect: '/goods/table',
-    name: 'goods',
+    redirect: '/goodManage/goods',
+    name: 'goodManage',
     meta: { title: '商品管理', icon: 'el-icon-s-help' },
     children: [
       {
@@ -114,8 +114,14 @@ export const constantRoutes = [
       {
         path: 'goodDistribution',
         name: 'goodDistribution',
-        component: () => import('@/views/goodManage/goodInfo'),
+        component: () => import('@/views/Distribution/goodDistribution'),
         meta: { title: '商品分布', icon: 'table' }
+      },
+      {
+        path: 'goodAddDistribution',
+        name: 'goodAddDistribution',
+        component: () => import('@/views/Distribution/goodAddDistribution'),
+        meta: { title: '添加商品分布', icon: 'table' }
       },
       {
         path: 'categoryTree',

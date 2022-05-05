@@ -123,8 +123,8 @@ export default {
         this.loading = false
       })
     },
-    gotoInfo(user) {
-      this.$router.push({ name: 'goodTable', params: { user: user }})
+    gotoInfo(good) {
+      this.$router.push({ name: 'goodTable', params: { good: good }})
     }
   }
 }

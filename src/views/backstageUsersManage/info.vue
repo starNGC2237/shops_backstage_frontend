@@ -1,6 +1,5 @@
 <template>
   <div class="user_info">
-    <h1 style="margin-bottom: 2rem">{{ $route.params.user?'修改仓库用户':'新建仓库用户' }}</h1>
     <el-form
       ref="form"
       :model="form"
@@ -47,11 +46,13 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route)
     if (this.$route.params.user) {
       Object.assign(this.form, this.$route.params.user)
       this.form.address = this.form.addressList[0].provinceName + this.form.addressList[0].cityName + this.form.addressList[0].districtName + this.form.addressList[0].addressInfo
       this.disabled = true
+      this.$route.meta.title = '修改仓库信息'
+    } else {
+      this.$route.meta.title = '添加仓库用户'
     }
   },
   methods: {

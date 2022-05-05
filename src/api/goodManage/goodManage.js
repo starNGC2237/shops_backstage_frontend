@@ -6,3 +6,6 @@ export function allGood(params) {
 export function getAllGoodInfo() {
   return request.get('/good/allInfo')
 }
+export function addGood(params) {
+  return request.post('/good/add', params, { type: 'json' })
+}
