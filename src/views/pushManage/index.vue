@@ -1,7 +1,7 @@
 <template>
   <div class="pushManage">
     <h1>推送管理</h1>
-    <el-button style="width: fit-content;margin-bottom: 1rem;">新建公告</el-button>
+    <el-button style="width: fit-content;margin-bottom: 1rem;" @click="dialogVisible = true">新建公告</el-button>
     <el-button style="width: fit-content;margin-bottom: 1rem;" type="primary" @click="getAllAnnounce">刷新</el-button>
     <el-table
       v-loading="loading"
@@ -39,23 +39,48 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text">{{ !!scope.row.isActive?'激活':'关闭' }}</el-button>
-          <el-button type="text" @click="delete(scope.row.announceId)">删除</el-button>
+          <el-button type="text" @click="toReAnnounce(scope.row,'修改状态')">{{ !!scope.row.isActive?'关闭':'激活' }}</el-button>
+          <el-button type="text" @click="deleteAnnounce(scope.row.announceId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog
+      title="添加公告"
+      :visible.sync="dialogVisible"
+      width="40%"
+      @close="dialogVisible = false;"
+      @closed="clearForm"
+    >
+      <el-form label-position="top">
+        <el-form-item label="标题">
+          <el-input v-model="form.title" />
+        </el-form-item>
+        <el-form-item label="内容">
+          <el-input v-model="form.content" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="newAnnounce">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { allAnnounce, deleteAnnounce } from '@/api/pushManage/pushManage'
+import { addAnnounce, allAnnounce, deleteAnnounce, reAnnounce } from '@/api/pushManage/pushManage'
 
 export default {
   name: 'Push',
   data() {
     return {
+      dialogVisible: false,
       loading: false,
-      pushData: []
+      pushData: [],
+      form: {
+        content: '',
+        title: ''
+      }
     }
   },
   mounted() {
@@ -70,10 +95,53 @@ export default {
         this.loading = false
       })
     },
-    delete(id) {
-      deleteAnnounce(id).then().finally(() => {
+    deleteAnnounce(id) {
+      deleteAnnounce(id).then(res => {
+        this.showMsg(res)
+      }).finally(() => {
         this.getAllAnnounce()
       })
+    },
+    toReAnnounce(announce, tag) {
+      let params = {}
+      if (tag === '修改状态') {
+        params = {
+          announceId: announce.announceId,
+          isActive: announce.isActive === 1 ? 0 : 1
+        }
+      }
+      reAnnounce(params).then(res => {
+        this.showMsg(res)
+      }).finally(() => {
+        this.getAllAnnounce()
+      })
+    },
+    showMsg(res) {
+      if (res.code === '200') {
+        this.$message({
+          type: 'success',
+          message: res.msg
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: res.msg
+        })
+      }
+    },
+    newAnnounce() {
+      addAnnounce(this.form.title, this.form.content).then(res => {
+        this.showMsg(res)
+      }).finally(() => {
+        this.dialogVisible = false
+        this.getAllAnnounce()
+      })
+    },
+    clearForm() {
+      this.form = {
+        content: '',
+        title: ''
+      }
     }
   }
 }

@@ -53,11 +53,14 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select v-model="form.category3" value-key="categoryId">
+        <el-select
+          v-model="form.category3"
+          value-key="categoryId"
+        >
           <el-option
             v-for="item in category3"
             :key="item.categoryId"
-            :value="item.categoryId"
+            :value="item"
             :label="item.categoryName"
           />
         </el-select>
