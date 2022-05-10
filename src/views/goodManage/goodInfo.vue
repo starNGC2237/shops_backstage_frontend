@@ -7,8 +7,17 @@
     >
       <el-form-item label="商品图片">
         <div style="display: flex">
-          <el-image v-if="!!form.imageUrl" style="width: 100px" :src="form.imageUrl" />
-          <el-button type="text">{{ !!form.imageUrl?"修改图片":"添加图片" }}</el-button>
+          <el-upload
+            class="upload-demo"
+            action=""
+            :http-request="()=>{}"
+            :on-change="handleChange"
+            :multiple="false"
+            :show-file-list="false"
+          >
+            <el-image v-if="!!form.imageUrl" style="width: 150px;" :src="form.imageUrl" alt="" />
+            <el-button type="text">{{ !!form.imageUrl?"修改图片":"添加图片" }}</el-button>
+          </el-upload>
         </div>
       </el-form-item>
       <el-form-item v-if="!!this.$route.params.good" label="商品ID">
@@ -73,7 +82,7 @@
 </template>
 
 <script>
-import { addGood } from '@/api/goodManage/goodManage'
+import { addGood, addImage } from '@/api/goodManage/goodManage'
 import { mapCategory } from '@/api/categorys/categoryTree'
 
 export default {
@@ -141,24 +150,62 @@ export default {
     })
   },
   methods: {
-    judge() {
-      if (this.$route.meta.title === '添加商品') {
-        const data = {
-          category1Id: this.form.category1.categoryId || null,
-          category1Name: this.form.category1.categoryName || null,
-          category2Id: this.form.category2.categoryId || null,
-          category2Name: this.form.category2.categoryName || null,
-          category3Id: this.form.category3.categoryId || null,
-          category3Name: this.form.category3.categoryName || null,
-          content: this.form.content || undefined,
-          goodName: this.form.goodName || undefined,
-          price: parseInt(this.form.price, 10) || undefined,
-          title: this.form.title || undefined
-        }
-        addGood(data).then().finally()
-      } else if (this.$route.meta.title === '修改商品') {
-        // todo
+    // 将上传图片的原路径赋值给临时路径
+    handleChange(file) {
+      this.form.imageUrl = null
+      // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+      if (window.createObjectURL !== undefined) { // basic
+        this.form.imageUrl = window.createObjectURL(file.raw)
+      } else if (window.URL !== undefined) { // mozilla(firefox)
+        this.form.imageUrl = window.URL.createObjectURL(file.raw)
+      } else if (window.webkitURL !== undefined) { // webkit or chrome
+        this.form.imageUrl = window.webkitURL.createObjectURL(file.raw)
       }
+    },
+    judge() {
+      if (this.form.imageUrl !== '') {
+        if (this.$route.meta.title === '添加商品') {
+          const data = {
+            category1Id: this.form.category1.categoryId || null,
+            category1Name: this.form.category1.categoryName || null,
+            category2Id: this.form.category2.categoryId || null,
+            category2Name: this.form.category2.categoryName || null,
+            category3Id: this.form.category3.categoryId || null,
+            category3Name: this.form.category3.categoryName || null,
+            content: this.form.content || undefined,
+            goodName: this.form.goodName || undefined,
+            price: parseInt(this.form.price, 10) || undefined,
+            title: this.form.title || undefined
+          }
+          addGood(data).then(res => {
+            if (res.code === '200') {
+              this.$message({
+                type: 'success',
+                message: res.msg
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.msg
+              })
+            }
+            this.addImage(res.data)
+          }).finally(() => {
+            this.$router.push({ path: '/goodManage/goods' })
+          })
+        } else if (this.$route.meta.title === '修改商品') {
+        // todo
+        }
+      } else {
+        this.$message.warning('请添加商品图片')
+      }
+    },
+    addImage(goodId) {
+      const blob = new Blob([this.form.imageUrl], {
+        type: 'text/plain'
+      })
+      // todo 上传文件
+      addImage(goodId, blob).then().catch().finally()
     }
   }
 }

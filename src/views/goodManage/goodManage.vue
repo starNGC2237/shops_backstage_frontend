@@ -7,8 +7,13 @@
         <el-input placeholder="输入关键字进行筛选" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="getUserData()">搜索</el-button>
-        <el-button type="primary">新建</el-button>
+        <el-button type="primary" @click="getGoodData()">搜索</el-button>
+        <el-button
+          type="primary"
+          @click="$router.push({path:'/goodManage/goodTable'})"
+        >
+          新建
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -93,7 +98,7 @@
         <!--todo-->
         <template slot-scope="scope">
           <el-button type="text" @click="gotoInfo(scope.row)">编辑</el-button>
-          <el-button v-if="$store.state.user.role === '商家'" type="text">删除</el-button>
+          <el-button v-if="$store.state.user.role === '商家'" type="text" @click="deleteGood(scope.row.goodId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -101,7 +106,7 @@
 </template>
 
 <script>
-import { allGood } from '@/api/goodManage/goodManage'
+import { allGood, deleteGood } from '@/api/goodManage/goodManage'
 
 export default {
   name: 'GoodManage',
@@ -112,10 +117,27 @@ export default {
     }
   },
   mounted() {
-    this.getUserData()
+    this.getGoodData()
   },
   methods: {
-    getUserData() {
+    deleteGood(goodId) {
+      deleteGood(goodId).then(res => {
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
+        }
+      }).finally(() => {
+        this.getGoodData()
+      })
+    },
+    getGoodData() {
       this.loading = true
       allGood({}).then(res => {
         this.goodData = res.data
