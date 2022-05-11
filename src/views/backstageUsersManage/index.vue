@@ -67,7 +67,7 @@
       >
         <template slot-scope="scope">
           <span v-if="scope.row.addressList[0]">
-            {{ scope.row.addressList[0].provinceName + scope.row.addressList[0].cityName + scope.row.addressList[0].districtName + scope.row.addressList[0].addressInfo }}
+            {{ scope.row.addressList[0].provinceName || '' + scope.row.addressList[0].cityName || '' + scope.row.addressList[0].districtName || '' + scope.row.addressList[0].addressInfo || '' }}
           </span>
         </template>
       </el-table-column>
@@ -77,10 +77,8 @@
         fixed="right"
         label="操作"
       >
-        <!--todo-->
         <template slot-scope="scope">
           <el-button type="text" @click="gotoInfo(scope.row)">编辑</el-button>
-          <el-button v-if="$store.state.user.role === '商家'" type="text">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

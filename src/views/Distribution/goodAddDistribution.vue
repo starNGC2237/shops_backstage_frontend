@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="goodAddDistribution">
     <h2>添加商品分布</h2>
     <el-form
       ref="form"
@@ -96,5 +96,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.goodAddDistribution{
+  padding: 1rem;
+}
 </style>

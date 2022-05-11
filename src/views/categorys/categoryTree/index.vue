@@ -15,7 +15,7 @@
       :filter-node-method="filterNode"
     >
       <span slot-scope="{ node, data }" style="width: 100%;">
-        <div style="display: flex;justify-content: space-between;width: 100%;">
+        <div style="display: flex;justify-content: space-between;width: 100%;align-items: center">
           <span>{{ node.label }}</span>
           <span>
             <el-button

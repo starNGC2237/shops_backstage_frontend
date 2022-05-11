@@ -25,7 +25,7 @@
       >
         <!--todo-->
         <template slot-scope="scope">
-          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text">
+          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName)">
             {{ !!scope.row.isCarry?'确认用户已取':'确认已发货' }}
           </el-button>
         </template>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { allOrder } from '@/api/orderManage/orderManage'
+import { allOrder, deliver } from '@/api/orderManage/orderManage'
 
 export default {
   name: 'OrderManage',
@@ -57,6 +57,9 @@ export default {
           }
         })
       }).finally()
+    },
+    deliverOrder(orderName) {
+      deliver(orderName).then()
     }
   }
 }

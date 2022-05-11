@@ -3,8 +3,7 @@
     <h1>商品管理</h1>
     <el-form :inline="true">
       <el-form-item>
-        <!--todo-->
-        <el-input placeholder="输入关键字进行筛选" />
+        <el-input v-model="filterKey" placeholder="输入关键字进行筛选" @input="filter" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getGoodData()">搜索</el-button>
@@ -95,7 +94,6 @@
         fixed="right"
         label="操作"
       >
-        <!--todo-->
         <template slot-scope="scope">
           <el-button type="text" @click="gotoInfo(scope.row)">编辑</el-button>
           <el-button v-if="$store.state.user.role === '商家'" type="text" @click="deleteGood(scope.row.goodId)">删除</el-button>
@@ -112,6 +110,7 @@ export default {
   name: 'GoodManage',
   data() {
     return {
+      filterKey: '',
       loading: false,
       goodData: []
     }
@@ -120,6 +119,15 @@ export default {
     this.getGoodData()
   },
   methods: {
+    filter() {
+      if (this.filterKey === '') {
+        this.getGoodData()
+      } else {
+        this.goodData = this.goodData.filter((item) => {
+          return item.goodName.indexOf(this.filterKey) >= 0
+        })
+      }
+    },
     deleteGood(goodId) {
       deleteGood(goodId).then(res => {
         if (res.code === '200') {
