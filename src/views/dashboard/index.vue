@@ -16,6 +16,8 @@ export default {
   name: 'Dashboard',
   data() {
     return {
+      myChart: null,
+      myChart2: null,
       option: {
         title: {
           text: '前七天用户日增长折线图',
@@ -77,33 +79,25 @@ export default {
       }
     }
   },
-  computed: {
-    // 基于准备好的dom，初始化echarts实例
-    myChart: function() {
-      return this.$echarts.init(this.$refs.users)
-    },
-    myChart2: function() {
-      return this.$echarts.init(this.$refs.feeds)
-    }
-  },
   mounted() {
-    this.getAllRegisterUsers()
     this.getStatisticsFeedBacks()
   },
   methods: {
     getAllRegisterUsers() {
+      this.myChart = this.$echarts.init(this.$refs.users)
       getRegisterUsers().then(res => {
         this.option.series[0].data = res.data
       }).finally(() => {
         this.myChart.setOption(this.option)
-        this.myChart2.setOption(this.optionFeedback)
       })
     },
     getStatisticsFeedBacks() {
+      this.myChart2 = this.$echarts.init(this.$refs.feeds)
       getStatisticsFeedBack().then(res => {
         this.optionFeedback.series[0].data = res.data
       }).finally(() => {
         this.myChart2.setOption(this.optionFeedback)
+        this.getAllRegisterUsers()
       })
     }
   }
