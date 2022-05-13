@@ -29,7 +29,7 @@
         <el-input-number v-model="form.number" label="描述文字" />
       </el-form-item>
       <el-form-item label="后台用户">
-        <el-select v-model="form.user" placeholder="请选择" value-key="goodId">
+        <el-select v-model="form.userName" placeholder="请选择" value-key="goodId">
           <el-option
             v-for="(item,index) in backstageUserData"
             :key="index"
@@ -39,7 +39,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button>确认</el-button>
+        <el-button @click="addNumbers">确认</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -49,6 +49,7 @@
 <script>
 import { getAllGoodInfo } from '@/api/goodManage/goodManage'
 import { allUser } from '@/api/userManage/userManage'
+import { addNumber } from '@/api/backstageUserManage/goodDistribution'
 
 export default {
   name: 'GoodAddDistribution',
@@ -58,7 +59,7 @@ export default {
         item: '',
         type: true,
         number: 0,
-        username: ''
+        userName: ''
       },
       tableData: [],
       backstageUserData: []
@@ -90,6 +91,9 @@ export default {
           this.backstageUserData = this.backstageUserData.concat(res[1].data)
         })
       }
+    },
+    addNumbers() {
+      addNumber(this.form.item.goodId, this.form.number, this.form.type ? 1 : 0, this.form.userName)
     }
   }
 }

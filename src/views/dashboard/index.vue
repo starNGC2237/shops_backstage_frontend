@@ -1,12 +1,17 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">欢迎您， {{ $store.state.user.nickName }}</div>
-    <div id="main" ref="main" />
+    <el-card v-if="$store.state.user.role === '商家'" shadow="hover" style="margin-bottom: 1rem">
+      <div id="feeds" ref="feeds" />
+    </el-card>
+    <el-card v-if="$store.state.user.role === '商家'" shadow="hover" style="margin-bottom: 1rem">
+      <div id="users" ref="users" />
+    </el-card>
   </div>
 </template>
 
 <script>
-import { getRegisterUsers } from '@/api/dashboard/dashboard'
+import { getRegisterUsers, getStatisticsFeedBack } from '@/api/dashboard/dashboard'
 export default {
   name: 'Dashboard',
   data() {
@@ -36,8 +41,37 @@ export default {
         },
         series: [
           {
-            data: [1, 2, 4, 5, 1, 1, 2],
+            data: [0, 0, 0, 0, 0, 0, 0],
             type: 'line'
+          }
+        ]
+      },
+      optionFeedback: {
+        title: {
+          text: '反馈解决情况',
+          subtext: 'Feedback solution',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: 'Feedback solution',
+            type: 'pie',
+            radius: '50%',
+            data: [],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
           }
         ]
       }
@@ -46,11 +80,15 @@ export default {
   computed: {
     // 基于准备好的dom，初始化echarts实例
     myChart: function() {
-      return this.$echarts.init(this.$refs.main)
+      return this.$echarts.init(this.$refs.users)
+    },
+    myChart2: function() {
+      return this.$echarts.init(this.$refs.feeds)
     }
   },
   mounted() {
     this.getAllRegisterUsers()
+    this.getStatisticsFeedBacks()
   },
   methods: {
     getAllRegisterUsers() {
@@ -58,6 +96,14 @@ export default {
         this.option.series[0].data = res.data
       }).finally(() => {
         this.myChart.setOption(this.option)
+        this.myChart2.setOption(this.optionFeedback)
+      })
+    },
+    getStatisticsFeedBacks() {
+      getStatisticsFeedBack().then(res => {
+        this.optionFeedback.series[0].data = res.data
+      }).finally(() => {
+        this.myChart2.setOption(this.optionFeedback)
       })
     }
   }
@@ -72,12 +118,15 @@ export default {
   &-text {
     font-size: 30px;
     line-height: 46px;
+    margin-bottom: 2rem;
   }
 }
-#main {
+#users {
   width: 100%;
   height: 400px;
-  margin-top: 2rem;
-
+}
+#feeds {
+  width: 100%;
+  height: 400px;
 }
 </style>
