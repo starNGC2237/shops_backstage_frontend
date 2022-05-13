@@ -15,7 +15,7 @@ export function addGood(params) {
 export function deleteGood(goodId) {
   return request.get('/good/delete', { params: { goodId }})
 }
-// 添加图片
-export function addImage(goodId, file) {
-  return request.post('/good/addImage', { params: { goodId, file }})
+// 修改商品
+export function reviseGood(params) {
+  return request.post('/good/revise', params, { type: 'json' })
 }

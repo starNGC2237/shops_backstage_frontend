@@ -21,7 +21,7 @@
         </div>
       </el-form-item>
       <el-form-item v-if="!!this.$route.params.good" label="商品ID">
-        <el-input v-model="form.goodId" />
+        <el-input v-model="form.goodId" disabled />
       </el-form-item>
       <el-form-item label="商品名称">
         <el-input v-model="form.goodName" />
@@ -82,14 +82,16 @@
 </template>
 
 <script>
-import { addGood, addImage } from '@/api/goodManage/goodManage'
+import { addGood, reviseGood } from '@/api/goodManage/goodManage'
 import { mapCategory } from '@/api/categorys/categoryTree'
+import axios from 'axios'
 
 export default {
   name: 'GoodInfo',
   data() {
     return {
       disabled: false,
+      file: '',
       form: {
         goodName: '',
         title: '',
@@ -152,6 +154,7 @@ export default {
   methods: {
     // 将上传图片的原路径赋值给临时路径
     handleChange(file) {
+      this.file = file
       this.form.imageUrl = null
       // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
       if (window.createObjectURL !== undefined) { // basic
@@ -189,23 +192,59 @@ export default {
                 message: res.msg
               })
             }
-            this.addImage(res.data)
+            this.addGoodImage(res.data)
           }).finally(() => {
             this.$router.push({ path: '/goodManage/goods' })
           })
         } else if (this.$route.meta.title === '修改商品') {
-        // todo
+          const data = {
+            goodId: this.$route.params.good.goodId,
+            category1Id: this.form.category1.categoryId || null,
+            category1Name: this.form.category1.categoryName || null,
+            category2Id: this.form.category2.categoryId || null,
+            category2Name: this.form.category2.categoryName || null,
+            category3Id: this.form.category3.categoryId || null,
+            category3Name: this.form.category3.categoryName || null,
+            content: this.form.content || undefined,
+            goodName: this.form.goodName,
+            price: parseInt(this.form.price, 10) || undefined,
+            title: this.form.title || undefined
+          }
+          reviseGood(data).then(res => {
+            if (res.code === '200') {
+              this.$message({
+                type: 'success',
+                message: res.msg
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.msg
+              })
+            }
+            this.addGoodImage(this.$route.params.good.goodId)
+          }).finally(() => {
+            this.$router.push({ path: '/goodManage/goods' })
+          })
         }
       } else {
         this.$message.warning('请添加商品图片')
       }
     },
-    addImage(goodId) {
-      const blob = new Blob([this.form.imageUrl], {
-        type: 'text/plain'
+    addGoodImage(goodId) {
+      const formData = new FormData()
+      formData.append('file', this.file.raw) // 文件列表
+      const params = {
+        goodId: goodId
+      }
+      axios({
+        url: 'https://backstage.starlibrary.online/api/good/addImage',
+        method: 'post',
+        data: formData,
+        params: params,
+        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+        contentType: false // 告诉axios不要去设置Content-Type请求头
       })
-      // todo 上传文件
-      addImage(goodId, blob).then().catch().finally()
     }
   }
 }
