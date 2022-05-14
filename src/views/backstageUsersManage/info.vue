@@ -110,7 +110,7 @@ export default {
       if (this.form.addressList.length === 0) {
         this.form.address = ''
       } else {
-        this.form.address = this.form.addressList[0].provinceName || '' + this.form.addressList[0].cityName || '' + this.form.addressList[0].districtName || '' + this.form.addressList[0].addressInfo || ''
+        this.form.address = ((this.form.addressList[0].provinceName || '') + (this.form.addressList[0].cityName || '') + (this.form.addressList[0].districtName || '') + (this.form.addressList[0].addressInfo || ''))
       }
       this.disabled = true
       this.$route.meta.title = '修改仓库信息'

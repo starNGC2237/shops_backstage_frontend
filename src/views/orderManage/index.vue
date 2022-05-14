@@ -25,8 +25,11 @@
       >
         <!--todo-->
         <template slot-scope="scope">
-          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName)">
+          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName,1)">
             {{ !!scope.row.isCarry?'确认用户已取':'确认已发货' }}
+          </el-button>
+          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName,0)">
+            确认已发货
           </el-button>
         </template>
       </el-table-column>
@@ -58,8 +61,22 @@ export default {
         })
       }).finally()
     },
-    deliverOrder(orderName) {
-      deliver(orderName).then()
+    deliverOrder(orderName, isCarry) {
+      deliver(orderName, isCarry).then(res => {
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
+        }
+      }).finally(() => {
+        this.getAllOrder()
+      })
     }
   }
 }

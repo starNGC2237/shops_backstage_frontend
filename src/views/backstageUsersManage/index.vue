@@ -67,7 +67,7 @@
       >
         <template slot-scope="scope">
           <span v-if="scope.row.addressList[0]">
-            {{ scope.row.addressList[0].provinceName || '' + scope.row.addressList[0].cityName || '' + scope.row.addressList[0].districtName || '' + scope.row.addressList[0].addressInfo || '' }}
+            {{ (scope.row.addressList[0].provinceName || '') + (scope.row.addressList[0].cityName || '') + (scope.row.addressList[0].districtName || '') + (scope.row.addressList[0].addressInfo || '') }}
           </span>
         </template>
       </el-table-column>
