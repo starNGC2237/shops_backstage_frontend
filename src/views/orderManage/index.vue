@@ -1,34 +1,28 @@
 <template>
   <div class="orderManage">
     <h1>订单管理</h1>
-    <el-table :data="orderData" border>
+    <el-table :data="orderNames" border class="a">
+      <el-table-column type="expand" width="100px">
+        <template slot-scope="scope">
+          <ShoppingCartExpand :props="scope.row.goodList" @fatherMethod="getAllOrder" />
+        </template>
+      </el-table-column>
       <el-table-column
         label="订单名"
         align="center"
         prop="orderName"
       />
       <el-table-column
-        label="商品名"
-        align="center"
-        prop="goods.goodName"
-      />
-      <el-table-column
-        label="应处理后台用户用户名"
-        align="center"
-        prop="toUser"
-      />
-      <el-table-column
-        width="100"
+        width="300"
         align="center"
         fixed="right"
         label="操作"
       >
-        <!--todo-->
         <template slot-scope="scope">
-          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName,1)">
-            {{ !!scope.row.isCarry?'确认用户已取':'确认已发货' }}
+          <el-button v-if="scope.row.goodList.some(item=>item.isCarry === 1)" type="text" @click="deliverOrder(scope.row.orderName,1)">
+            确认用户已取
           </el-button>
-          <el-button v-if="scope.row.toUser === $store.state.user.userName" type="text" @click="deliverOrder(scope.row.orderName,0)">
+          <el-button v-if="scope.row.goodList.some(item=>item.isCarry === 0)" type="text" @click="deliverOrder(scope.row.orderName,0)">
             确认已发货
           </el-button>
         </template>
@@ -39,12 +33,17 @@
 
 <script>
 import { allOrder, deliver } from '@/api/orderManage/orderManage'
+import ShoppingCartExpand from '@/components/Expand/ShoppingCartExpand'
 
 export default {
   name: 'OrderManage',
+  components: {
+    ShoppingCartExpand
+  },
   data() {
     return {
-      orderData: []
+      orderData: [],
+      orderNames: []
     }
   },
   mounted() {
@@ -52,11 +51,23 @@ export default {
   },
   methods: {
     getAllOrder() {
+      this.orderData = []
+      this.orderNames = []
       allOrder(1).then(res => {
         this.orderData = res.data
-        this.orderData.forEach((item) => {
+        this.orderData.forEach(item => {
           if (item.goods.length === 1) {
             item.goods = item.goods[0]
+          }
+          item.number = item.goods.number
+          if (this.orderNames.some(itemO => itemO.orderName === item.orderName)) {
+            this.orderNames.forEach(itemO => {
+              if (itemO.orderName === item.orderName) {
+                itemO.goodList.push(item)
+              }
+            })
+          } else {
+            this.orderNames.push({ orderName: item.orderName, goodList: [item] })
           }
         })
       }).finally()
@@ -85,5 +96,8 @@ export default {
 <style scoped lang="scss">
 .orderManage{
   padding: 1rem;
+}
+::v-deep .el-table__expanded-cell{
+  padding: 10px !important;
 }
 </style>

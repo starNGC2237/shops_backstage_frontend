@@ -6,3 +6,6 @@ export function allUser(role) {
 export function getAllAreaMap() {
   return request.get('/express/area/all/map')
 }
+export function createStore(params) {
+  return request.post('/user/createStore', params, { type: 'json' })
+}

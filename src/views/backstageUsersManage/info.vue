@@ -18,8 +18,8 @@
         <el-input v-model="form.passWord" show-password auto-complete="off" />
       </el-form-item>
       <el-form-item label="仓库地址">
-        <span>{{ form.address }}</span>
-        <el-button @click="dialogVisible = true">{{ form.address?'修改':'新增' }}</el-button>
+        <span>{{ (form.address.provinceName || '') + (form.address.cityName || '') + (form.address.districtName || '') + (form.address.addressInfo || '') }}</span>
+        <el-button @click="dialogVisible = true">{{ form.address.provinceName?'修改':'新增' }}</el-button>
       </el-form-item>
       <el-form-item label="用户权限">
         <el-input v-model="form.role" disabled />
@@ -72,14 +72,14 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getAllAreaMap } from '@/api/backstageUserManage/backstageUserManage'
+import { createStore, getAllAreaMap } from '@/api/backstageUserManage/backstageUserManage'
 
 export default {
   name: 'Info',
@@ -98,7 +98,12 @@ export default {
         nickName: '',
         phone: '',
         passWord: '',
-        address: '',
+        address: {
+          sheng: '',
+          shi: '',
+          qu: '',
+          info: ''
+        },
         role: '仓库'
       },
       areas: {}
@@ -141,13 +146,16 @@ export default {
       }
     },
     onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
+      const data = {
+        userName: this.form.userName,
+        nickName: this.form.nickName,
+        phone: this.form.phone,
+        passWord: this.form.passWord,
+        role: '仓库',
+        addressList: []
+      }
+      data.addressList.push(this.address)
+      createStore(data).then().finally()
     },
     commitAddAddress() {
       /*
